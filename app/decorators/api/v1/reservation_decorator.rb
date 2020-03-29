@@ -1,13 +1,7 @@
 class API::V1::ReservationDecorator < Draper::Decorator
-  delegate_all
+  delegate :id, :date, :movie_name, :client_fullname, :seats
 
-  # Define presentation-specific methods here. Helpers are accessed through
-  # `helpers` (aka `h`). You can override attributes, for example:
-  #
-  #   def created_at
-  #     helpers.content_tag :span, class: 'time' do
-  #       object.created_at.strftime("%a %m/%d/%y")
-  #     end
-  #   end
-
+  def movie_name
+    object.movie.name
+  end
 end
