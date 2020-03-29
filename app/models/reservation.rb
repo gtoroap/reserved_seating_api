@@ -8,7 +8,6 @@ class Reservation < ApplicationRecord
   validates_presence_of :date, :seats
 
   validate :valid_date, on: :create
-  validate :valid_date_range
   validate :available_seats
 
   def valid_date
