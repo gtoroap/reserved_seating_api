@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe "API::V1::Movies", type: :request do
 
-  before do
-    @movie = Movie.create(name: 'Dummy', description: 'Dummy', image_url: nil, days: 'mon,tue')
-  end
-
   describe '#index' do
+    before do
+      @movie = Movie.create(name: 'Dummy', description: 'Dummy', image_url: nil, days: 'mon,tue')
+    end
+
     context 'when params are valid and list have items' do
       let(:url) { '/api/v1/movies?days=mon' }
       
@@ -33,7 +33,7 @@ RSpec.describe "API::V1::Movies", type: :request do
       it 'retrieve an error' do
         get url
         expect(response.status).to eq(422)
-        expect(JSON.parse(response.body)).to include('error')
+        expect(JSON.parse(response.body)["error"]).to include('Day must be a valid day')
       end
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe "API::V1::Movies", type: :request do
       let(:url) { '/api/v1/movies' }
       let(:params) { {params: {name: 'Test', description: 'Test', days: 'mon,tue'}} }
       
-      it 'creates a movie successfulyy' do
+      it 'creates a movie successfully' do
         post url, params
         expect(response.status).to eq(201)
         expect(change { Movie.count }.by(1))
@@ -54,10 +54,10 @@ RSpec.describe "API::V1::Movies", type: :request do
       let(:url) { '/api/v1/movies' }
       let(:params) { {params: {name: nil, description: 'Test', days: 'jan,feb'}} }
       
-      it 'creates a movie successfulyy' do
+      it 'creates a movie successfully' do
         post url, params
         expect(response.status).to eq(422)
-        expect(JSON.parse(response.body)).to include('errors')
+        expect(JSON.parse(response.body)["errors"]).to include("Name can't be blank")
       end
     end
   end
