@@ -1,24 +1,142 @@
-# README
+# reserved_seating_api
+This is a repo for testing purpose only
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Pre-requisites
 
-Things you may want to cover:
+- Create a Postgresql database with name `reserved_seating`
+- Create this environment variables
+    - DATABASE_URL (Optional). If this is setted, you don't need the following variables
+    - DATABASE_USERNAME
+    - DATABASE_PASSWORD
+- That's it.
 
-* Ruby version
+## How to run the app locally
 
-* System dependencies
+This is a Rails app. You just only need to run `rails s` in the root folder.
 
-* Configuration
+## API Documentation
 
-* Database creation
+Hint: params in **bold** are required
 
-* Database initialization
+### Create movies
 
-* How to run the test suite
+#### Endpoint
 
-* Services (job queues, cache servers, search engines, etc.)
+    POST /movies
 
-* Deployment instructions
+#### Parameters
+- **name**: String
+- **description**: String
+- **days**: String (must have day names comma separated and name must have three first letters in downcase)
+- image_url: String
 
-* ...
+#### Request Body
+
+    {
+      "name": "Jocker",
+      "description": "This is a great movie",
+      "image_url": "https://via.placeholder.com/64",
+      "days": "mon,tue,wed,thu,fri,sat,sun"
+    }
+
+#### Response Body
+
+    {
+      "id": 1,
+      "name": "Jocker",
+      "description": "This is a great movie",
+      "image_url": "https://via.placeholder.com/64",
+      "days": "mon,tue,wed,thu,fri,sat,sun"
+    }
+
+### List movies
+
+#### Endpoint
+
+    GET /movies?day=mon
+
+#### Parameters
+- **day**: String
+
+#### Response Body
+
+    [
+      {
+        "id": 1,
+        "name": "Jocker",
+        "description": "This is a great movie",
+        "image_url": "https://via.placeholder.com/64",
+        "days": "mon,tue,wed,thu,fri,sat,sun"
+      },
+      {
+        "id": 2,
+        "name": "Inception",
+        "description": "This is a great movie",
+        "image_url": "https://via.placeholder.com/96",
+        "days": "thu,fri,sat,sun"
+      }
+    ]
+      
+
+### Create reservations
+
+#### Endpoint
+
+    POST /reservations
+
+#### Parameters
+- **movie_id**: Integer
+- **date**: String
+- **seats**: Integer
+- client_fullname: String
+
+#### Request Body
+
+    {
+      "movie_id": 1,
+      "date": "2020-03-22",
+      "client_fullname": "John Doe",
+      "seats": 2
+    }
+
+#### Response Body
+
+    {
+      "id": 1,
+      "movie_id": 1,
+      "date": "2020-03-22",
+      "seats": 2
+    }
+
+### List reservations
+
+#### Endpoint
+
+    GET /reservations?start_date=2020-03-22&end_date=2020-03-31
+
+#### Parameters
+- **start_date**: String
+- **end_date**: String
+
+#### Response Body
+
+    [
+      {
+        "id": 1,
+        "movie_id": 1,
+        "date": "2020-03-22",
+        "seats": 2
+      },
+      {
+        "id": 2,
+        "movie_id": 1,
+        "date": "2020-03-22",
+        "seats": 4
+      },
+      {
+        "id": 3,
+        "movie_id": 2,
+        "date": "2020-03-24",
+        "seats": 8
+      }
+    ]
